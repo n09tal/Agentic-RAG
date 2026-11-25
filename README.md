@@ -6,8 +6,7 @@ An AI agent that answers questions about headphones using real Amazon reviews
 (Amazon Reviews 2023). Every number is recomputable from the database, and every quote
 links back to the original review.
 
-> **Status:** the local development environment is ready (FastAPI backend, PostgreSQL + pgvector,
-> Next.js frontend, CI). Retrieval and agent features are in progress.
+> **Status:** local development environment, data snapshot `demo-v1` (1,119 English reviews of two headphones), and model access are ready. Retrieval and agent features are in progress.
 
 ## Tech stack
 
@@ -15,6 +14,7 @@ links back to the original review.
 - **Database:** PostgreSQL 17 + pgvector, run with Docker Compose
 - **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS
 - **Tooling:** uv, npm, pytest, ESLint, GitHub Actions
+- **Models:** Gemini API via the Google Gen AI SDK: `gemini-3.6-flash` for answers, `gemini-embedding-2` for embeddings (1,536 dimensions)
 
 ## Getting started
 
@@ -50,6 +50,15 @@ npm run dev
 ```
 
 Open `http://localhost:3000` (use `localhost`, not `127.0.0.1`).
+
+### 4. Check model access (uses Gemini API key)
+
+Add `GEMINI_API_KEY` to `.env`, then:
+
+```bash
+uv run python -m backend.smoke_test --data-dir <your data dir> --snapshot-id demo-v1
+```
+
 
 ### Run the checks
 
