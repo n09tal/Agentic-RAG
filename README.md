@@ -29,6 +29,7 @@ links back to the original review.
 ```bash
 cp .env.example .env        # set your own password in both places
 docker compose up -d --wait
+uv run python -m db.migrate   # create or update the tables
 ```
 
 ### 2. Start the backend
@@ -85,3 +86,4 @@ cd frontend && npm run lint && npm run build
 ## Docs
 
 - [Requirements: demo questions and answer shape](docs/requirements.md)
+- [Database schema](docs/database.md)
