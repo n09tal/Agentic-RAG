@@ -110,6 +110,20 @@ confidently foreign.
 
 A review can have more than one reason.
 
+## Human approval
+Tool: `ingest/approve_reviews.py` shows every staged review (those flagged by language screening
+first) and records one decision per review in `staging/approval_decisions.jsonl` (local, never
+committed). The file is append-only: the latest decision for a review wins, and undo is recorded
+as a new line, so every change is kept with a timestamp.
+
+Approval criteria:
+- **Approve** when both the title and the text are English and readable. Brand names, model numbers,
+  typos and very short English texts (e.g. "Love them!") are fine; text is never edited.
+- **Reject: `non_english`** when any part of the title or text is in another language, including
+  mixed-language reviews.
+- **Reject: `unreadable`** when the text is empty or has no readable words (only symbols, emoji or numbers).
+- **Skip** when unsure; skipped reviews stay undecided and are excluded from the snapshot.
+
 ## Scope and notes
 - Statistics cover **the chosen listing only**. Smaller listings of the same models are excluded
   (WH-1000XM5: 8 listings, 111 reviews; Momentum 4: 1 listing, 11 reviews).
