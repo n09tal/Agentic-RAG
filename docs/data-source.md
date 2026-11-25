@@ -73,6 +73,43 @@ to the local data directory (never committed).
 | Review lines in source | 825 | 333 |
 | Unique reviews after de-duplication | 814 | 329 |
 
+## Language screening
+Script: `ingest/screen_language.py` writes `staging/language_screening.jsonl` (local, never committed).
+It only sorts reviews for human review; every review in the public snapshot is still approved by a person.
+
+- **Model:** fastText language identification `lid.176.bin`
+  (https://fasttext.cc/docs/en/language-identification.html, CC BY-SA 3.0), run with the
+  `fasttext-predict` package and stored in `models/` in the local data directory.
+- Before detection, `<br />` tags and newlines are replaced by spaces. The stored text is unchanged.
+
+| Rule | Reason code |
+|---|---|
+| Text is empty | `empty_text` |
+| Text has fewer than 20 letters | `short_text` |
+| Text is not detected as English with score >= 0.80 | `text_not_confident_english` |
+| A sentence with >= 20 letters is detected as another language with score >= 0.80 | `foreign_sentence` |
+| Title has >= 10 letters and is detected as another language with score >= 0.80 | `title_not_english` |
+
+A review with any reason is `needs_review`; otherwise it is an `english_candidate`.
+
+**Threshold calibration:** with the 0.95 starting point from the project plan, 275 of 1,143 reviews
+would need review, and spot checks showed they were almost all plain English. At 0.80, all 18 Spanish
+reviews are still caught, and spot-checked reviews scoring 0.80-0.90 were English. Short titles are
+unreliable (e.g. "Love love love!" was detected as Spanish), so titles are flagged only when
+confidently foreign.
+
+| Status / reason | Reviews |
+|---|---|
+| english_candidate | 1,078 |
+| needs_review | 65 |
+| - text_not_confident_english | 32 |
+| - short_text | 30 |
+| - foreign_sentence | 18 |
+| - title_not_english | 14 |
+| - empty_text | 1 |
+
+A review can have more than one reason.
+
 ## Scope and notes
 - Statistics cover **the chosen listing only**. Smaller listings of the same models are excluded
   (WH-1000XM5: 8 listings, 111 reviews; Momentum 4: 1 listing, 11 reviews).
