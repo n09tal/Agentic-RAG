@@ -35,7 +35,7 @@ noise cancelling and wireless/Bluetooth, a model number is present, 300-1,000 re
 | Brand / model | Sony / WH-1000XM5 (model no. `WH1000XM5/L`) | Sennheiser / Momentum 4 Wireless (model no. `509267`) |
 | Subcategory | Over-Ear Headphones | Over-Ear Headphones |
 | Variants (`asin`) in reviews | 3 | 2 |
-| Reviews in dataset | 825 | 333 |
+| Review lines in dataset (before de-duplication) | 825 | 333 |
 | Average rating / rating count on Amazon | 4.5 / 5,658 | 4.1 / 2,091 |
 | Recorded price | $398.00 | $299.95 |
 
@@ -46,7 +46,7 @@ noise cancelling and wireless/Bluetooth, a model number is present, 300-1,000 re
   (e.g. Bose 700: 730 vs 2,991 reviews; Bose QC35 II: 5 listings). For these two, the chosen listing
   holds nearly all of the model's reviews (WH-1000XM5: 825 of 936; Momentum 4: 333 of 344), so every
   review of the listing can be used without sampling.
-- **Right size:** 1,158 reviews in total, small enough to approve review by review and large enough
+- **Right size:** 1,143 unique reviews in total (1,158 lines before de-duplication), small enough to approve review by review and large enough
   for meaningful rates.
 - **All demo aspects are discussed** (keyword check used only for selection; real labels come later):
   battery/charging 144 vs 131, noise cancelling 449 vs 154, comfort/fit 307 vs 132.
@@ -54,6 +54,24 @@ noise cancelling and wireless/Bluetooth, a model number is present, 300-1,000 re
   likely to show real differences.
 - **Disambiguation test case:** the dataset also contains Sony WF-1000XM5 earbuds, so a query like
   "Sony 1000XM5" should trigger a model clarification instead of a guess.
+
+## Extraction (staging)
+Script: `ingest/extract_reviews.py` writes `staging/products.jsonl` and `staging/reviews_raw.jsonl`
+to the local data directory (never committed).
+
+- **review_id** = `r_` + first 16 hex characters of SHA-256(`user_id|asin|timestamp`).
+  The same source record always gets the same ID, so re-running the import never creates new IDs.
+- **Source locator:** each review keeps `source_file` and `source_line` (1-based line number in the
+  decompressed file), so any excerpt can be checked against the original record.
+- Title and text are copied verbatim (no cleaning or spelling fixes).
+- **Duplicates:** the source file repeats 13 reviews as 15 byte-identical extra lines for these two
+  products. They are skipped and counted. Records with the same ID but different content would be
+  reported as conflicts; none were found.
+
+| | Sony WH-1000XM5 | Sennheiser Momentum 4 |
+|---|---|---|
+| Review lines in source | 825 | 333 |
+| Unique reviews after de-duplication | 814 | 329 |
 
 ## Scope and notes
 - Statistics cover **the chosen listing only**. Smaller listings of the same models are excluded
