@@ -30,6 +30,7 @@ links back to the original review.
 cp .env.example .env        # set your own password in both places
 docker compose up -d --wait
 uv run python -m db.migrate   # create or update the tables
+uv run python -m ingest.import_snapshot --data-dir <your data dir> --snapshot-id demo-v1   # needs the local data, see docs/data-source.md
 ```
 
 ### 2. Start the backend
