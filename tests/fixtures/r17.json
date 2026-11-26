@@ -1,0 +1,53 @@
+{
+  "alias": "R17",
+  "product": {
+    "parent_asin": "B0B95V4ZBW",
+    "title": "Sennheiser Momentum 4 Wireless Headphones - Bluetooth Headset for Crystal-Clear Calls with Adaptive Noise Cancellation, 60h Battery Life, Customizable Sound - White )",
+    "brand": "Sennheiser Consumer Audio",
+    "model_number": "509267",
+    "category": "Over-Ear Headphones",
+    "recorded_price": 299.95
+  },
+  "review": {
+    "review_id": "r_a3bc4ae843b64eb8",
+    "parent_asin": "B0B95V4ZBW",
+    "asin": "B0B6GHW1SX",
+    "rating": 2.0,
+    "title": "Sennheiser Momentum 4 Wireless Headphones - Did not like",
+    "text": "I used these headphones for a few days, but the pressure around my ears caused me so much discomfortment that I had to discontinue wearing them. The sound of these headphones was just okay, and the ANC was not that impressive. I'm comparing these to my Apple Airpods Max, which is not really a fair comparison. I don't like taking my Apple headphones out and about with me and was hoping these headphones could fit that bill - for use in coffee shops, etc.<br /><br />Since the comparison to my Airpods Max with these headphones is not fair, my Airpods Max sound amazing, and the ANC cuts out all sounds in my house. (I've used them in coffee shops, and the ANC works amazingly in noisy settings.) I think I would have kept these headphones for use in public except for the pain they caused around my ears. My Airpods Max does press firmly around my ears, although I don't have any problems wearing them for extended periods of time.<br /><br />I would recommend these if you don't have an issue with tight-fitting headphones. I know I'm likely among the minority on this subject, and that said, I also would say to wait until they are on a good sale because, in my opinion, they are overpriced.",
+    "timestamp": 1675717498113,
+    "reviewed_at": "2023-02-06T21:04:58.113000+00:00",
+    "helpful_vote": 0,
+    "verified_purchase": true,
+    "source_file": "Electronics.jsonl.gz",
+    "source_line": 7364542,
+    "review_language": "en",
+    "language_approved": true,
+    "snapshot_id": "demo-v1"
+  },
+  "chunk_ranges": [
+    [
+      0,
+      456
+    ],
+    [
+      468,
+      933
+    ],
+    [
+      945,
+      1195
+    ]
+  ],
+  "negative_excerpts": [
+    "the pressure around my ears caused me so much discomfortment",
+    "except for the pain they caused around my ears"
+  ],
+  "label": {
+    "review_id": "r_a3bc4ae843b64eb8",
+    "aspect": "comfort",
+    "sentiment": "negative",
+    "evidence_quote": "the pressure around my ears caused me so much discomfortment that I had to discontinue wearing them",
+    "label_version": "manual-db01"
+  }
+}
