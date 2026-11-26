@@ -70,6 +70,24 @@ erDiagram
 Database tests use the `fresh_database_url` fixture (`tests/conftest.py`), which creates an empty
 database with a random name for each test and drops it afterwards, so tests never touch development data.
 
+## Importing a snapshot
+`uv run python -m ingest.import_snapshot --data-dir <data dir> --snapshot-id demo-v1`
+
+1. Refuses to start unless the local snapshot file matches the checksum in `snapshots/<id>.json`.
+2. Upserts the products and inserts the reviews in **one transaction** (`ON CONFLICT DO NOTHING`,
+   so a re-run inserts nothing).
+3. Reads the reviews back and compares product, rating, title and body with the snapshot; any
+   difference (same id, different content) aborts the import.
+4. Checks reviews per product against the manifest counts; a mismatch aborts the import.
+
+If a check fails, the transaction is rolled back and nothing is imported.
+
+| | Sony WH-1000XM5 | Sennheiser Momentum 4 |
+|---|---|---|
+| Reviews imported from `demo-v1` | 797 | 322 |
+| Second run | 0 new | 0 new |
+| Recorded (historical) price | $398.00 | $299.95 |
+
 ## DB-01 acceptance: one review counts as one complaint
 `tests/test_db01.py` loads R17, a real approved review (fixture `tests/fixtures/r17.json`, user id removed),
 into an empty test database. Two of its three chunks criticize the same aspect (pressure and pain
