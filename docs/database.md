@@ -69,3 +69,18 @@ erDiagram
 ## Tests
 Database tests use the `fresh_database_url` fixture (`tests/conftest.py`), which creates an empty
 database with a random name for each test and drops it afterwards, so tests never touch development data.
+
+## DB-01 acceptance: one review counts as one complaint
+`tests/test_db01.py` loads R17, a real approved review (fixture `tests/fixtures/r17.json`, user id removed),
+into an empty test database. Two of its three chunks criticize the same aspect (pressure and pain
+around the ears); one manual negative `comfort` label (`label_version = manual-db01`) is added.
+
+| Step | Check | Result |
+|---|---|---|
+| 1 Load | rows in `reviews` / `review_chunks` / `review_aspects`; every chunk equals `body[char_start:char_end]` | 1 / 3 / 1; 0 mismatches |
+| 2 Retrieve | two known negative excerpts | 2 different chunks, both pointing to the same review |
+| 3 Count | complaining reviews / labeled reviews | 1 / 1 (joining chunks to labels would wrongly give 3) |
+| 4 Re-run | load the same data again | 0 new rows; still 1 / 3 / 1 and 1 complaint |
+
+Complaints are counted with `count(DISTINCT review_id)` on `review_aspects`, filtered by product,
+labeled status and label version, never by joining chunks to labels.
